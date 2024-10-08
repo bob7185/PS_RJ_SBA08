@@ -115,7 +115,8 @@ function getLearnerData(course, ag, submissions) {
     // array that holds the number of group of learners substitution
     const learners = Object.keys(submissions_grouped_by_id);
     // looping through learners submissions
-    for (let i = 0; i < learners.length; i++) {
+    let i = 0; 
+    while (i < learners.length) {
         const entry = []
         let total_point = 0;
         let learner_cumul = 0;
@@ -129,7 +130,7 @@ function getLearnerData(course, ag, submissions) {
             if ((assignment_block[j].submission.submitted_at <= assignment_entry.due_at) && (assignment_entry.due_at <= "2024-10-07")) {
                 try {
                     if (assignment_entry.points_possible === 0) {
-                        throw "Number of points possible cannot be equal to 0";
+                        throw "Number of points possible cannot be equal to 0!";
                    }
                    else {
                         entry.push([[assignment_entry.id], assignment_block[j].submission.score / assignment_entry.points_possible]);
@@ -138,7 +139,7 @@ function getLearnerData(course, ag, submissions) {
                  }
                 }
                 catch (error) {
-                    console.log('Oh no! Wrong input, please check data ', error);
+                    console.log('Oh no! Wrong input, please check data! ', error);
                     return;
                 }
             }
@@ -155,7 +156,7 @@ function getLearnerData(course, ag, submissions) {
                     }
                 }
                 catch (error) {
-                    console.log('Oh no! Wrong input, please check data ', error);
+                    console.log('Oh no! Wrong input, please check data! ', error);
                     return;
                 }
             }
@@ -164,6 +165,7 @@ function getLearnerData(course, ag, submissions) {
         entry.push(['avg', learner_cumul / total_point]);
         const obj = Object.fromEntries(entry);
         result_data.push(obj);
+        i++;
     }
 
     return result_data;
