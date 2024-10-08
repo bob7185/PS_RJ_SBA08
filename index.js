@@ -15,7 +15,7 @@ const AssignmentGroup = {
             id: 1,
             name: "Declare a Variable",
             due_at: "2023-01-25",
-            points_possible: 50
+            points_possible: 50 
         },
         {
             id: 2,
@@ -95,9 +95,7 @@ function LearnerSubmissionGrouped(submissions) {
         return groupedById;
     }, {})
     return submissions_by_id;
-} 
-
-// function that calculates the average of the noote for each learner 
+}
 
 function getLearnerData(course, ag, submissions) {
     const result_data = [];
@@ -114,16 +112,11 @@ function getLearnerData(course, ag, submissions) {
     //  Reformat the submissions data into an object of learners with submission for alll their homeworks
     const submissions_grouped_by_id = LearnerSubmissionGrouped(LearnerSubmissions);
 
-    // visualize data 
-    console.log(submissions_grouped_by_id);
-
     // array that holds the number of group of learners substitution
     const learners = Object.keys(submissions_grouped_by_id);
-
-    console.log("=========================================================================")
     // looping through learners submissions
     for (let i = 0; i < learners.length; i++) {
-        const entry =[]
+        const entry = []
         let total_point = 0;
         let learner_cumul = 0;
         entry.push(["id", learners[i]]);
@@ -135,36 +128,44 @@ function getLearnerData(course, ag, submissions) {
             // check if the submitted assignment was submitted on time 
             if ((assignment_block[j].submission.submitted_at <= assignment_entry.due_at) && (assignment_entry.due_at <= "2024-10-07")) {
                 try {
-                entry.push([[assignment_entry.id],  assignment_block[j].submission.score / assignment_entry.points_possible]);
-                learner_cumul += assignment_block[j].submission.score;
-                total_point += assignment_entry.points_possible;
+                    if (assignment_entry.points_possible === 0) {
+                        throw "Number of points possible cannot be equal to 0";
+                   }
+                   else {
+                        entry.push([[assignment_entry.id], assignment_block[j].submission.score / assignment_entry.points_possible]);
+                        learner_cumul += assignment_block[j].submission.score;
+                        total_point += assignment_entry.points_possible;
+                 }
                 }
-                catch (error){
-                    console.log('Oh no! Wrong input, please check data', error);
+                catch (error) {
+                    console.log('Oh no! Wrong input, please check data ', error);
+                    return;
                 }
             }
             // If submitted late deduct 10%
-            else if((assignment_block[j].submission.submitted_at > assignment_entry.due_at) && (assignment_entry.due_at <= "2024-10-07"))
-            {
-               try{
-                 entry.push([[assignment_entry.id], ((assignment_block[j].submission.score / assignment_entry.points_possible) * 0.90).toFixed(3)]);  
-                learner_cumul += assignment_block[j].submission.score * 0.90;
-                total_point += assignment_entry.points_possible;
-               }
-               catch (error)
-               {
-                console.log('Oh no! Wrong input, please check data', error);
-               }
+            else if ((assignment_block[j].submission.submitted_at > assignment_entry.due_at) && (assignment_entry.due_at <= "2024-10-07")) {
+                try {
+                    if (assignment_entry.points_possible === 0 ) {
+                        throw error
+                    }
+                    {
+                        entry.push([[assignment_entry.id], ((assignment_block[j].submission.score / assignment_entry.points_possible) * 0.90).toFixed(3)]);
+                        learner_cumul += assignment_block[j].submission.score * 0.90;
+                        total_point += assignment_entry.points_possible;
+                    }
+                }
+                catch (error) {
+                    console.log('Oh no! Wrong input, please check data ', error);
+                    return;
+                }
             }
-            
+
         }
         entry.push(['avg', learner_cumul / total_point]);
-        console.log(entry);
-        console.log('-----------------------------------------------------------------')
         const obj = Object.fromEntries(entry);
         result_data.push(obj);
     }
-    
+
     return result_data;
 }
 
