@@ -111,7 +111,7 @@ function getLearnerData(course, ag, submissions) {
     }
     //  Reformat the submissions data into an object of learners with submission for alll their homeworks
     const submissions_grouped_by_id = LearnerSubmissionGrouped(LearnerSubmissions);
-
+    console.log("Viewing the submissions grouped by student ID:\n", submissions_grouped_by_id);
     // array that holds the number of group of learners substitution
     const learners = Object.keys(submissions_grouped_by_id);
     // looping through learners submissions
@@ -173,4 +173,4 @@ function getLearnerData(course, ag, submissions) {
 
 
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-console.log(result);
+console.log("Result data after processing:\n", result);
