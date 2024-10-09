@@ -114,6 +114,7 @@ function getLearnerData(course, ag, submissions) {
     console.log("Viewing the submissions grouped by student ID:\n", submissions_grouped_by_id);
     // array that holds the number of group of learners substitution
     const learners = Object.keys(submissions_grouped_by_id);
+    console.log("Learners whose assignments are bring checked:\n", learners);
     // looping through learners submissions
     let i = 0; 
     while (i < learners.length) {
