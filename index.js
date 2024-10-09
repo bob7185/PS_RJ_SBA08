@@ -97,8 +97,28 @@ function LearnerSubmissionGrouped(submissions) {
     return submissions_by_id;
 }
 
+//function that gets today's date and return it in the format YYYY-MM-DD
+function getTodayDate()
+{
+    let my_date = new Date().toISOString();
+    let date_formatted ="";
+    for (let i = 0; i < my_date.length; i++)
+    {
+        // break out of the for loop if we get to the T characters in the dtae
+        if(my_date[i] === 'T')
+        {
+            break;
+        }
+        else {
+        date_formatted = date_formatted.concat(my_date[i]);
+    } 
+    }
+    return date_formatted;
+}
+
 function getLearnerData(course, ag, submissions) {
     const result_data = [];
+    const today_date = getTodayDate();
     //First step is to check whether the assignment group provided belongs to the course info. 
     try {
         if (ag.course_id !== course.id) {
@@ -128,7 +148,7 @@ function getLearnerData(course, ag, submissions) {
         for (let j = 0; j < assignment_block.length; j++) {
             let assignment_entry = AssignmentEntry(ag, assignment_block[j].assignment_id);
             // check if the submitted assignment was submitted on time 
-            if ((assignment_block[j].submission.submitted_at <= assignment_entry.due_at) && (assignment_entry.due_at <= "2024-10-07")) {
+            if ((assignment_block[j].submission.submitted_at <= assignment_entry.due_at) && (assignment_entry.due_at <= today_date)) {
                 try {
                     if (assignment_entry.points_possible === 0) {
                         throw "Number of points possible cannot be equal to 0!";
@@ -145,7 +165,7 @@ function getLearnerData(course, ag, submissions) {
                 }
             }
             // If submitted late deduct 10%
-            else if ((assignment_block[j].submission.submitted_at > assignment_entry.due_at) && (assignment_entry.due_at <= "2024-10-07")) {
+            else if ((assignment_block[j].submission.submitted_at > assignment_entry.due_at) && (assignment_entry.due_at <= today_date)) {
                 try {
                     if (assignment_entry.points_possible === 0 ) {
                         throw error
@@ -171,7 +191,5 @@ function getLearnerData(course, ag, submissions) {
 
     return result_data;
 }
-
-
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 console.log("Result data after processing:\n", result);
